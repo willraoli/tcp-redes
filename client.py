@@ -8,9 +8,17 @@ if __name__ == '__main__':
   server.connect((ip, port))
 
   while True:
-    string = input('Manda a msg ae dudão\n')
-    server.send(bytes(string, 'utf-8'))
-    buffer = server.recv(1024)
-    buffer = buffer.decode('utf-8')
-
-    print('Recebido:', buffer)
+    try:
+      string = input('Manda a msg ae dudão\n')
+      
+      if string != 'quit':
+        server.send(bytes(string, 'utf-8'))
+        buffer = server.recv(2048)
+        buffer = buffer.decode('utf-8')
+        print('Recebido:', buffer)
+      else:
+        server.close()
+        break
+    except:
+      print('zuou')
+      break

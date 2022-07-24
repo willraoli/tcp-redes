@@ -1,8 +1,5 @@
 import socket
-
 from _thread import *
-import threading
-
 
 if __name__ == '__main__':
   ip = '0.0.0.0'
@@ -16,7 +13,7 @@ if __name__ == '__main__':
 
   def newClient(conn, address):
     while True:
-      string = client.recv(1024)
+      string = client.recv(2048)
       string = string.decode('utf-8')
       conn.send(bytes(string, 'utf-8'))
       
