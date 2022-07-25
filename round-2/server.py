@@ -1,14 +1,14 @@
 import socket
 import select
 
-ip = socket.gethostname()
-port = 1234
-header_size = 10
-codification = 'utf-8'
+IP = socket.gethostname()
+PORT = 1234
+HEADER_SIZE = 10
+CODIFICATION = 'utf-8'
 
 server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-server_socket.bind((ip, port))
+server_socket.bind((IP, PORT))
 server_socket.listen()
 
 sockets_list = [server_socket]
@@ -16,12 +16,12 @@ clients = {}
 
 def receive_msg(client_socket):
   try:
-    msg_header = client_socket.recv(header_size)
+    msg_header = client_socket.recv(HEADER_SIZE)
 
     if not len(msg_header):
       return False
     
-    msg_length = int(msg_header.decode(codification).strip())
+    msg_length = int(msg_header.decode(CODIFICATION).strip())
     return {'header': msg_header, 'data': client_socket.recv(msg_length)}
   except:
     return False
@@ -42,19 +42,19 @@ while True:
       sockets_list.append(client_socket)
       clients[client_socket] = user
 
-      print(f'Accepted new connection from {client_address[0]}:{client_address[1]} username: {user["data"].decode(codification)}')
+      print(f'Accepted new connection from {client_address[0]}:{client_address[1]} username: {user["data"].decode(CODIFICATION)}')
 
     else:
       msg = receive_msg(notified_socket)
 
       if msg is False:
-        print(f'Closed connection from: {clients[notified_socket]["data"].decode(codification)}')
+        print(f'Closed connection from: {clients[notified_socket]["data"].decode(CODIFICATION)}')
         sockets_list.remove(notified_socket)
         del clients[notified_socket]
         continue
 
       user = clients[notified_socket]
-      print(f'Received message from {user["data"].decode(codification)}: {msg["data"].decode(codification)}')
+      print(f'Received message from {user["data"].decode(CODIFICATION)}: {msg["data"].decode(CODIFICATION)}')
 
       for client_socket in clients:
         if client_socket != notified_socket:
